@@ -1,0 +1,917 @@
+[
+  {
+    "cliente": "IGOR PAOLETTI/TOSCANA",
+    "frequenza_valore": 3,
+    "frequenza_unita": "settimane"
+  },
+  {
+    "cliente": "G.D.M. TESSUTI SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "settimane"
+  },
+  {
+    "cliente": "MANIFATTURA BUSTI  & C. SPA  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "settimane"
+  },
+  {
+    "cliente": "TESS SERICA A.M. TABORELLI SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "settimane"
+  },
+  {
+    "cliente": "TESSILE OPERATI SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "settimane"
+  },
+  {
+    "cliente": "FRANCIA DIRETTO SIMONE",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "GILBERTO LIMA",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "ALPES MANIFATTURA FILATI ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "BARUTÇU",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "BORGINI JERSEY SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "CARBONI SRL ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "CASALEGNO TENDAGGI SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "CONFSPORT SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "COSTA SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "CUFRA nastri",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "DANZO SRL",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "DELCOTEX-DELIUS ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "D-TEX SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "E. BOSELLI & C. SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "EDI MICHEL WEBEREI GMBH  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "ELYAF",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "EMS-CHEMIE AG  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "EREZ DOKUMA ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "F.LLI CITTERIO SPA  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "FIBRE E TESSUTI SPECIALI SPA  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "FIDIVI ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "FIVEOL TEXTIL S.P.A.  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "KVADRAT WEAVING  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "GEBR. MUNZERT GMBH & CO  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "GIOTTO",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "IPEKER",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "LA TESSILSTAMPA SAS",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MANIFATTURE SETTENTRIONALI SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MARKERT ITALIA SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MARZOTTO LAB SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MECONDOR SPA  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MECTEX",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MEHMET FAIK YILMAZIPEK ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MELTAM",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MONTEOLIVETO SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "NASTROTESSUTI",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "NORMAN GROUP",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "NYFIL SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "PALMIRA MOLTENI",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "Pameks Giyim Sanayi As  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "SAATI",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "SERATES SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TDS SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TECNOYARN SPA  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESS. DI RAYON D'INVERUNO SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESS. ROSSI",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA RONCORONI SNC ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TEX.MA DI MAZZOLENI MAURIZIO  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "YILMAZIPEK",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "Z TECH SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "ZEGNA BARUFFA",
+    "frequenza_valore": 3,
+    "frequenza_unita": "settimane"
+  },
+  {
+    "cliente": "MANIFATTURA A TESTORI DI G SPA  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "STIEGER AG",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA GALBIATI SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA PURICELLI SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "PAUL PHILLPPART",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "BRUGNOLI GIOVANNI SPA  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "CIESSE TENDAGGI SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "CLERICI TESSUTO & C. SPA  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "EDA",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "EFFEBI TESSUTI SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "GRUPPO DONDI SPA  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "LADY JANE SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "LEDATEX SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "LIMONTA",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "LOSITEX SRL",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MAGLIFICIO ALTO MILANESE SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MAN. ITALIANE SCUDIERI SRL",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MICO SPORT SPA",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "OLMETEX SPA  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "PIZVAL",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "RACING FORCE",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "SERICA 1870 SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "SIRIO TENDAGGI SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "SOTEXCO",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "STAFF JERSEY SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TAT-TESS. AUT. TAVERNERIO SPA  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TENDAGGI PARADISO SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESEO SPA  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESMO SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESS. MARIO GHIOLDI & C. SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESS. SIDOTTI",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSILGOAL SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSILIDEA SRL",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA ARMAND SACCAL SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA BRAGA ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA COLOMBO ELSO SNC",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA DI LURAGO D'ERBA SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA G.B.M. SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA GHEZZI",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA LYCIA SNC  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA M. PASTORELLI SPA  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA ORESTE MARIANI SPA  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA PUNTO MAGLIA SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA ROMANO VIGANI  SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA VIGNETTA SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA SOLBIATI SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSUTI & TESSUTI SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "WINTEX SRL  ",
+    "frequenza_valore": 2,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "A.G. LAMBRUGO & FIGLI SRL  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "ACHILLE VALERA LISSONI SRL  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "ANGELO VALERA S.R.L.  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "ASAHIKASEI FIBERS ITALIA SRL  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "FANTI SRL ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "FRATELLI VITALI DI ROBERTO SPA  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "I.S.E.R.SRLINDUSTRIA SERICA ENRICO RATTI ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MACRITEX SPA  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MARIO CAVELLI SRL  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MARIO CUCCHETTI TESSUTI SRL  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MARIO SIRTORI SPA  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "PIATTI & GUFFANTI ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "RUBELLI SPA  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "SIR.TESS. - TESS DI ROGENO SRL  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "T.R.E. MODA SRL  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA GRISOTTO SRL  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA MARINONI SRL  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA TAIANA VIRGILIO SPA  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA TETTAMANTI",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TREMODA",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "BRUNELLO S.P.A. ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "CAIRONI CARLO & C. SRL  ",
+    "frequenza_valore": 1,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "ROHLEDER GMBH  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "STELLINI",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESS. PEVERELLI N. E C. SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA CARLO PAPIS SRL  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA DESIANA  ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA UBOLDI ALESSANDRO ",
+    "frequenza_valore": 3,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "ASPESI",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "BISETA SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "BITEX",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "BONATI NASTRIFICIO",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "BOTTO GIUSEPPE",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "CAMBIAGHI",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "COT. OLCESE FERRARI",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "EPICATEX S.R.L. A SOCIO UNICO  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "EXPOTEX SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "FIBERTEX  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "GOTTIFREDI & MAFFIOLI ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "GROSSO NORRES GROUP",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "GRUP TEKSTIL ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "GUSTAV GERSTER GMBH & CO.KG  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "GUTEX GMBH  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "HUBER & CO. AG. BANDFABRIK  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "IBENA",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "INTRA-TESS SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MAGLIERIA GINA SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MANIFATTURA REMARI S.R.L.  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MANIFATTURA SESIA SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "NASTRO SRL",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "OCEANSAFE GMBH  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "ORDITURA DI MOZZATE",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "PANATEX SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "PAROTEX SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "PECCO & MALINVERNO",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "PIAVE",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "PIRANDELLO",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "PROFIMED SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "RIFRA",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "SAERTEX",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "SASSI TESSITURA SERICA ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSILBIELLA",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSILRIVA SPA  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA PERTILE SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA TELE METALLICHE ROSSI",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA UBERTINO",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TESSITURA UBOLDI SNC DI U.G. & C. ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TORCITURA PADANA SPA",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TUASNE",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "VALMATEX SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "W. BARNET ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "WILHEM KNEITZ AG Textilwerk ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "WOELFEL & CO GARDINEN  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "ZINGARDI",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "ZUCCHETTI TESSITURA SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "FILTES INTERNATIONAL SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "MULTITEX SNC ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TECNOFILATI SRL  ",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  },
+  {
+    "cliente": "TECHNOFABRIC SPA",
+    "frequenza_valore": 6,
+    "frequenza_unita": "mesi"
+  }
+]

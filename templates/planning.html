@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Planning Visite</title>
+</head>
+<body>
+    <h1>Clienti da programmare</h1>
+
+    <h2>Questa settimana</h2>
+    {% if questa_settimana %}
+        <ul>
+            {% for c in questa_settimana %}
+                <li>{{ c.cliente }} {{ c.prossima }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nessun cliente da programmare questa settimana.</p>
+    {% endif %}
+
+    <h2>Prossima settimana</h2>
+    {% if prossima_settimana %}
+        <ul>
+            {% for c in prossima_settimana %}
+                <li>{{ c.cliente }} {{ c.prossima }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nessun cliente da programmare la prossima settimana.</p>
+    {% endif %}
+</body>
+</html>

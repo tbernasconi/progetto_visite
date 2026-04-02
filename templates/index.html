@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Visite Clienti</title>
+
+    <style>
+        :root {
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --primary: #2563eb;
+            --radius: 18px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .page {
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 14px 14px 110px;
+        }
+
+        .topbar {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 14px 16px;
+            position: sticky;
+            top: 10px;
+            z-index: 20;
+            margin-bottom: 12px;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--muted);
+            margin: 0 0 12px 0;
+        }
+
+        .progress-wrap {
+            width: 100%;
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 25%;
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.25s ease;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 18px;
+            margin-top: 12px;
+        }
+
+        h2 {
+            font-size: 24px;
+            line-height: 1.2;
+            margin: 0 0 10px 0;
+        }
+
+        p {
+            margin: 0 0 16px 0;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 15px 14px;
+            font-size: 16px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .choice-btn {
+            min-height: 90px;
+            padding: 16px;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: #fff;
+            color: var(--text);
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            cursor: pointer;
+        }
+
+        .choice-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .review {
+            display: grid;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .review-item {
+            padding: 12px 14px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #fafafa;
+        }
+
+        .review-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .review-value {
+            font-size: 15px;
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .nav {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+            background: rgba(243, 244, 246, 0.96);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .nav-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 14px;
+            min-height: 54px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="topbar">
+            <div class="title">Visite Clienti</div>
+            <div class="subtitle" id="stepTitle">Passo 1 di 4 · Cliente</div>
+            <div class="progress-wrap">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <form action="/salva" method="post" id="formVisite">
+            <input type="hidden" name="cliente" id="cliente" required>
+            <input type="hidden" name="tipo" id="tipo" required>
+            <input type="hidden" name="modifica_index" id="modifica_index" value="{{ modifica_index if modifica_index is not none else '' }}">
+
+            <div class="step active" id="step1">
+                <div class="card">
+                    <h2>Cliente</h2>
+                    <p>Scrivi il nome e seleziona il cliente suggerito.</p>
+
+                    <label for="clienteInput">Cliente</label>
+                    <input
+                        type="text"
+                        id="clienteInput"
+                        list="listaClienti"
+                        placeholder="Scrivi nome cliente"
+                        autocomplete="off"
+                        value="{{ bozza_in_modifica.cliente if bozza_in_modifica else '' }}"
+                        required
+                    >
+
+                    <datalist id="listaClienti">
+                        {% for cliente in clienti %}
+                            <option value="{{ cliente }}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+            </div>
+
+            <div class="step" id="step2">
+                <div class="card">
+                    <h2>Tipo attività</h2>
+                    <p>Tocca uno dei pulsanti.</p>
+
+                    <div class="choice-grid">
+                        <button type="button" class="choice-btn" data-value="IP">Incontro di persona</button>
+                        <button type="button" class="choice-btn" data-value="TEL">Telefonata</button>
+                        <button type="button" class="choice-btn" data-value="VC">Videocall</button>
+                        <button type="button" class="choice-btn" data-value="QUOT">Quotazione</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step" id="step3">
+                <div class="card">
+                    <h2>Settimana</h2>
+                    <p>Puoi lasciare quella automatica oppure cambiarla.</p>
+
+                    <label for="settimana">Settimana</label>
+                    <input
+                        type="text"
+                        name="settimana"
+                        id="settimana"
+                        value="{{ bozza_in_modifica.settimana if bozza_in_modifica else settimana_corrente }}"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="step" id="step4">
+                <div class="card">
+                    <h2>Conferma</h2>
+                    <p>Controlla i dati prima di generare il file.</p>
+
+                    <div class="review">
+                        <div class="review-item">
+                            <div class="review-label">Cliente</div>
+                            <div class="review-value" id="riepilogoCliente">—</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-label">Tipo attività</div>
+                            <div class="review-value" id="riepilogoTipo">—</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-label">Settimana</div>
+                            <div class="review-value" id="riepilogoSettimana">{{ settimana_corrente }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step" id="step5">
+                <div class="card">
+                    <h2>Bozze salvate</h2>
+                    <p>Queste sono le visite salvate in memoria prima di scaricare l’Excel.</p>
+
+                    {% if bozze_visite %}
+                        <div class="review">
+                            {% for bozza in bozze_visite %}
+                                <div class="review-item">
+                                    <div class="review-label">Visita {{ loop.index }}</div>
+                                    <div class="review-value">
+                                        {{ bozza.cliente }} · {{ bozza.settimana }} · {{ bozza.tipo }}
+                                    </div>
+
+                                    <div style="margin-top: 10px;">
+                                        <a href="/?step=1&modifica={{ loop.index0 }}" style="text-decoration: none;">
+                                            <button type="button" class="btn btn-secondary">Modifica</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="review-item">
+                            <div class="review-value">Nessuna bozza salvata</div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="nav">
+        <div class="nav-inner">
+            <button type="button" class="btn btn-secondary" id="btnIndietro">Indietro</button>
+            <button type="button" class="btn btn-primary" id="btnAvanti">Avanti</button>
+        </div>
+
+        <div class="nav-inner" style="margin-top: 8px;">
+            <a href="/scarica" style="display: flex; width: 100%; text-decoration: none;">
+                <button type="button" class="btn btn-secondary">
+                    Scarica Excel
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const clienteInput = document.getElementById("clienteInput");
+        const cliente = document.getElementById("cliente");
+        const tipo = document.getElementById("tipo");
+        const modificaIndex = document.getElementById("modifica_index");
+        const settimana = document.getElementById("settimana");
+
+        const riepilogoCliente = document.getElementById("riepilogoCliente");
+        const riepilogoTipo = document.getElementById("riepilogoTipo");
+        const riepilogoSettimana = document.getElementById("riepilogoSettimana");
+
+        const choiceButtons = document.querySelectorAll(".choice-btn");
+        const steps = document.querySelectorAll(".step");
+        const btnIndietro = document.getElementById("btnIndietro");
+        const btnAvanti = document.getElementById("btnAvanti");
+        const progressBar = document.getElementById("progressBar");
+        const stepTitle = document.getElementById("stepTitle");
+        const formVisite = document.getElementById("formVisite");
+
+        let stepCorrente = Number(new URLSearchParams(window.location.search).get("step")) || 1;
+
+        const etichette = {
+            IP: "Incontro di persona",
+            TEL: "Telefonata",
+            VC: "Videocall",
+            QUOT: "Quotazione"
+        };
+
+        const tipoInModifica = "{{ bozza_in_modifica.tipo if bozza_in_modifica else '' }}";
+        if (tipoInModifica) {
+            tipo.value = tipoInModifica;
+        }
+
+        cliente.value = clienteInput.value;
+
+        if (tipo.value) {
+            choiceButtons.forEach((btn) => {
+                if (btn.dataset.value === tipo.value) {
+                    btn.classList.add("active");
+                }
+            });
+        }
+
+        function aggiornaStep() {
+            steps.forEach((step, index) => {
+                step.classList.toggle("active", index + 1 === stepCorrente);
+            });
+
+            btnIndietro.disabled = stepCorrente === 1;
+
+            if (stepCorrente === 4) {
+                btnAvanti.textContent = "Genera file";
+            } else if (stepCorrente === 5) {
+                btnAvanti.textContent = "Nuova visita";
+            } else {
+                btnAvanti.textContent = "Avanti";
+            }
+
+            const titoli = {
+                1: "Passo 1 di 5 · Cliente",
+                2: "Passo 2 di 5 · Tipo attività",
+                3: "Passo 3 di 5 · Settimana",
+                4: "Passo 4 di 5 · Conferma",
+                5: "Passo 5 di 5 · Bozze salvate"
+            };
+
+            stepTitle.textContent = titoli[stepCorrente];
+            progressBar.style.width = `${stepCorrente * 20}%`;
+
+            riepilogoCliente.textContent = cliente.value || "—";
+            riepilogoTipo.textContent = etichette[tipo.value] || "—";
+            riepilogoSettimana.textContent = settimana.value || "—";
+        }
+
+        function validaStep() {
+            if (stepCorrente === 1) return clienteInput.value.trim() !== "";
+            if (stepCorrente === 2) return tipo.value.trim() !== "";
+            if (stepCorrente === 3) return settimana.value.trim() !== "";
+            return true;
+        }
+
+        clienteInput.addEventListener("input", () => {
+            cliente.value = clienteInput.value;
+            riepilogoCliente.textContent = clienteInput.value || "—";
+        });
+
+        settimana.addEventListener("input", () => {
+            riepilogoSettimana.textContent = settimana.value || "—";
+        });
+
+        choiceButtons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                choiceButtons.forEach((b) => b.classList.remove("active"));
+                btn.classList.add("active");
+                tipo.value = btn.dataset.value;
+                riepilogoTipo.textContent = etichette[btn.dataset.value];
+            });
+        });
+
+        btnAvanti.addEventListener("click", () => {
+            if (!validaStep()) {
+                alert("Completa questo passaggio prima di continuare.");
+                return;
+            }
+
+            if (stepCorrente < 4) {
+                stepCorrente++;
+                aggiornaStep();
+            } else if (stepCorrente === 4) {
+                formVisite.submit();
+            } else {
+                window.location.href = "/";
+            }
+        });
+
+        btnIndietro.addEventListener("click", () => {
+            if (stepCorrente > 1) {
+                stepCorrente--;
+                aggiornaStep();
+            }
+        });
+
+        aggiornaStep();
+    </script>
+</body>
+</html>

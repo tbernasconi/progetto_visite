@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Configura Clienti</title>
+</head>
+<body>
+
+<h1>Configurazione frequenza clienti</h1>
+
+<form method="post">
+    <label>Cliente:</label>
+    <select name="cliente" id="cliente">
+        {% for cliente in clienti %}
+            <option value="{{ cliente }}">{{ cliente }}</option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Ogni quanto:</label>
+    <input type="number" name="valore" id="valore" required>
+
+    <select name="unita" id="unita">
+        <option value="settimane">Settimane</option>
+        <option value="mesi">Mesi</option>
+    </select>
+
+    <br><br>
+
+    <button type="submit">Salva</button>
+</form>
+
+<hr>
+
+<h2>Configurazioni attuali</h2>
+
+<ul>
+    {% for c in clienti_config %}
+        <li>
+            {{ c.cliente }} → ogni {{ c.frequenza_valore }} {{ c.frequenza_unita }}
+        </li>
+    {% endfor %}
+</ul>
+
+<script>
+    const configClienti = {{ clienti_config | tojson | safe }};
+
+    const clienteSelect = document.getElementById("cliente");
+    const valoreInput = document.getElementById("valore");
+    const unitaSelect = document.getElementById("unita");
+
+    function aggiornaCampi() {
+        const clienteSelezionato = clienteSelect.value;
+        const config = configClienti.find(c => c.cliente === clienteSelezionato);
+
+        if (config) {
+            valoreInput.value = config.frequenza_valore;
+            unitaSelect.value = config.frequenza_unita;
+        } else {
+            valoreInput.value = "";
+            unitaSelect.value = "settimane";
+        }
+    }
+
+    clienteSelect.addEventListener("change", aggiornaCampi);
+    aggiornaCampi(); // ✅ pre-popola al caricamento
+</script>
+
+</body>
+</html>
