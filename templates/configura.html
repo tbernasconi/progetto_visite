@@ -5,7 +5,11 @@
     <title>Configura Clienti</title>
 </head>
 <body>
-
+<div style="margin-bottom:20px;">
+    <a href="{{ url_for('index') }}">Home</a> |
+    <a href="{{ url_for('planning') }}">Planning</a> |
+    <a href="{{ url_for('configura') }}">Configura</a>
+</div>
 <h1>Configurazione frequenza clienti</h1>
 
 <form method="post">
@@ -44,7 +48,7 @@
 </ul>
 
 <script>
-    const configClienti = {{ clienti_config | tojson | safe }};
+    const configClienti = JSON.parse('{{ clienti_config | tojson | safe }}');
 
     const clienteSelect = document.getElementById("cliente");
     const valoreInput = document.getElementById("valore");

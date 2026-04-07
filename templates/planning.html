@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="it">
+
+
 <head>
     <meta charset="UTF-8">
     <title>Planning Visite</title>
 </head>
 <body>
+   <div style="margin-bottom:20px;">
+        <a href="{{ url_for('index') }}">Home</a> |
+        <a href="{{ url_for('planning') }}">Planning</a> |
+        <a href="{{ url_for('configura') }}">Configura</a>
+    </div>
+
     <h1>Clienti da programmare</h1>
 
     <h2>Questa settimana</h2>
@@ -18,16 +26,7 @@
         <p>Nessun cliente da programmare questa settimana.</p>
     {% endif %}
 
-    <h2>Prossima settimana</h2>
-    {% if prossima_settimana %}
-        <ul>
-            {% for c in prossima_settimana %}
-                <li>{{ c.cliente }} {{ c.prossima_visita }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Nessun cliente da programmare la prossima settimana.</p>
-    {% endif %}
+    
     <h2>Ancora da visitare</h2>
 
     {% if mai_visitati %}
