@@ -403,6 +403,7 @@ def get_ultima_visita_db(cliente):
             {"cliente": cliente}
         ).fetchone()
 
+
         if not row:
             return None
 
