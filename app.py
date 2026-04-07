@@ -425,7 +425,13 @@ def clienti_da_programmare_db():
     oggi = datetime.today()
     settimana_corrente = oggi.isocalendar()[1]
 
-    questa_settimana = []
+    settimane_target = {
+        settimana_corrente: [],
+        settimana_corrente + 1: [],
+        settimana_corrente + 2: [],
+        settimana_corrente + 3: []
+    }
+
     mai_visitati = []
 
     for cliente in get_clienti_configurati_db():
@@ -435,7 +441,6 @@ def clienti_da_programmare_db():
 
         ultima_visita = get_ultima_visita_db(cliente)
 
-        # 👉 NUOVO BLOCCO
         if not ultima_visita:
             record = {
                 "cliente": cliente,
@@ -452,18 +457,19 @@ def clienti_da_programmare_db():
         if prossima_data:
             settimana_prossima = prossima_data.isocalendar()[1]
 
-            if settimana_prossima == settimana_corrente:
+            if settimana_prossima in settimane_target:
                 record = {
                     "cliente": cliente,
+                    "settimana_numero": settimana_prossima,
                     "ultima_visita": f'{ultima_visita["valore"]} ({ultima_visita["settimana_colonna"]})',
                     "tipo_ultima_visita": ultima_visita["valore"],
                     "data_ultima_visita": ultima_visita["data_visita"].strftime("%d/%m/%Y"),
                     "prossima_visita": prossima_data.strftime("%d/%m/%Y"),
                     "frequenza": f'{config["frequenza_valore"]} {config["frequenza_unita"]}'
                 }
-                questa_settimana.append(record)
+                settimane_target[settimana_prossima].append(record)
 
-    return questa_settimana, mai_visitati
+    return settimane_target, mai_visitati
 
 def get_visite_db():
     assert engine is not None
@@ -568,11 +574,19 @@ def scarica():
 
 @app.route("/planning")
 def planning():
-    questa_settimana, mai_visitati = clienti_da_programmare_db()
+    settimane_target, mai_visitati = clienti_da_programmare_db()
+    settimana_corrente = datetime.today().isocalendar()[1]
 
     return render_template(
         "planning.html",
-        clienti_settimana=questa_settimana,
+        questa_settimana=settimane_target.get(settimana_corrente, []),
+        prossima_settimana=settimane_target.get(settimana_corrente + 1, []),
+        tra_due_settimane=settimane_target.get(settimana_corrente + 2, []),
+        tra_tre_settimane=settimane_target.get(settimana_corrente + 3, []),
+        numero_settimana_corrente=settimana_corrente,
+        numero_settimana_prossima=settimana_corrente + 1,
+        numero_settimana_due=settimana_corrente + 2,
+        numero_settimana_tre=settimana_corrente + 3,
         mai_visitati=mai_visitati
     )
 

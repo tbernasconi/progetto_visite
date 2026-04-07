@@ -1,44 +1,79 @@
 <!DOCTYPE html>
 <html lang="it">
-
-
 <head>
     <meta charset="UTF-8">
     <title>Planning Visite</title>
 </head>
 <body>
-   <div style="margin-bottom:20px;">
+    <div style="margin-bottom:20px;">
         <a href="{{ url_for('index') }}">Home</a> |
         <a href="{{ url_for('planning') }}">Planning</a> |
         <a href="{{ url_for('configura') }}">Configura</a>
     </div>
 
-    <h1>Clienti da programmare</h1>
+    <h1>Planning visite</h1>
 
-    <h2>Questa settimana</h2>
+    <h2>Questa settimana (wk {{ numero_settimana_corrente }})</h2>
     {% if questa_settimana %}
         <ul>
             {% for c in questa_settimana %}
-                <li>{{ c.cliente }} {{ c.prossima_visita }}</li>
+                <li>
+                    {{ c.cliente }} — wk {{ c.settimana_numero }} — {{ c.prossima_visita }}
+                </li>
             {% endfor %}
         </ul>
     {% else %}
         <p>Nessun cliente da programmare questa settimana.</p>
     {% endif %}
 
-    
-    <h2>Ancora da visitare</h2>
-
-    {% if mai_visitati %}
-    <ul>
-        {% for c in mai_visitati %}
-            <li>
-                {{ c.cliente }} — frequenza: {{ c.frequenza }}
-            </li>
-        {% endfor %}
-    </ul>
+    <h2>Prossima settimana (wk {{ numero_settimana_prossima }})</h2>
+    {% if prossima_settimana %}
+        <ul>
+            {% for c in prossima_settimana %}
+                <li>
+                    {{ c.cliente }} — wk {{ c.settimana_numero }} — {{ c.prossima_visita }}
+                </li>
+            {% endfor %}
+        </ul>
     {% else %}
-    <p>Tutti i clienti hanno almeno una visita registrata</p>
+        <p>Nessun cliente da programmare la prossima settimana.</p>
+    {% endif %}
+
+    <h2>Tra due settimane (wk {{ numero_settimana_due }})</h2>
+    {% if tra_due_settimane %}
+        <ul>
+            {% for c in tra_due_settimane %}
+                <li>
+                    {{ c.cliente }} — wk {{ c.settimana_numero }} — {{ c.prossima_visita }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nessun cliente da programmare tra due settimane.</p>
+    {% endif %}
+
+    <h2>Tra tre settimane (wk {{ numero_settimana_tre }})</h2>
+    {% if tra_tre_settimane %}
+        <ul>
+            {% for c in tra_tre_settimane %}
+                <li>
+                    {{ c.cliente }} — wk {{ c.settimana_numero }} — {{ c.prossima_visita }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nessun cliente da programmare tra tre settimane.</p>
+    {% endif %}
+
+    <h2>Ancora da visitare</h2>
+    {% if mai_visitati %}
+        <ul>
+            {% for c in mai_visitati %}
+                <li>{{ c.cliente }} — frequenza: {{ c.frequenza }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Tutti i clienti hanno almeno una visita registrata.</p>
     {% endif %}
 </body>
 </html>
