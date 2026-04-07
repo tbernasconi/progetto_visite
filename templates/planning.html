@@ -3,8 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Planning Visite</title>
+
+    <style>
+        .simone {
+            background-color: #e0f2fe;
+            padding: 6px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+        }
+
+        .luca {
+            background-color: #fef3c7;
+            padding: 6px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
+
     <div style="margin-bottom:20px;">
         <a href="{{ url_for('index') }}">Home</a> |
         <a href="{{ url_for('planning') }}">Planning</a> |
@@ -17,7 +34,7 @@
     {% if questa_settimana %}
         <ul>
             {% for c in questa_settimana %}
-                <li>
+                <li class="{{ 'simone' if c.referente == 'Simone' else 'luca' }}">
                     {{ c.cliente }} — wk {{ c.settimana_numero }} — {{ c.prossima_visita }}
                 </li>
             {% endfor %}
@@ -30,7 +47,7 @@
     {% if prossima_settimana %}
         <ul>
             {% for c in prossima_settimana %}
-                <li>
+                <li class="{{ 'simone' if c.referente == 'Simone' else 'luca' }}">
                     {{ c.cliente }} — wk {{ c.settimana_numero }} — {{ c.prossima_visita }}
                 </li>
             {% endfor %}
@@ -43,7 +60,7 @@
     {% if tra_due_settimane %}
         <ul>
             {% for c in tra_due_settimane %}
-                <li>
+                <li class="{{ 'simone' if c.referente == 'Simone' else 'luca' }}">
                     {{ c.cliente }} — wk {{ c.settimana_numero }} — {{ c.prossima_visita }}
                 </li>
             {% endfor %}
@@ -56,7 +73,7 @@
     {% if tra_tre_settimane %}
         <ul>
             {% for c in tra_tre_settimane %}
-                <li>
+                <li class="{{ 'simone' if c.referente == 'Simone' else 'luca' }}">
                     {{ c.cliente }} — wk {{ c.settimana_numero }} — {{ c.prossima_visita }}
                 </li>
             {% endfor %}
@@ -75,5 +92,6 @@
     {% else %}
         <p>Tutti i clienti hanno almeno una visita registrata.</p>
     {% endif %}
+
 </body>
 </html>

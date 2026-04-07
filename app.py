@@ -422,6 +422,7 @@ def get_ultima_visita_db(cliente):
         }
 
 def clienti_da_programmare_db():
+    
     oggi = datetime.today()
     settimana_corrente = oggi.isocalendar()[1]
 
@@ -438,6 +439,13 @@ def clienti_da_programmare_db():
         config = get_config_cliente_db(cliente)
         if not config:
             continue
+
+        cliente_info = next(
+                (c for c in get_clienti_anagrafica_db() if c["nome"] == cliente),
+            {}
+        )
+
+        referente = cliente_info.get("referente", "")
 
         ultima_visita = get_ultima_visita_db(cliente)
 
@@ -460,6 +468,7 @@ def clienti_da_programmare_db():
             if settimana_prossima in settimane_target:
                 record = {
                     "cliente": cliente,
+                    "referente": referente,
                     "settimana_numero": settimana_prossima,
                     "ultima_visita": f'{ultima_visita["valore"]} ({ultima_visita["settimana_colonna"]})',
                     "tipo_ultima_visita": ultima_visita["valore"],
