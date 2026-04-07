@@ -1,19 +1,108 @@
 from datetime import datetime, timedelta, date
 from flask import Flask, render_template, request, send_file, redirect, url_for
+from dotenv import load_dotenv
+from sqlalchemy import create_engine, text
 import pandas as pd
 import os
-import json
 import re
+import tempfile
 
 app = Flask(__name__)
 
-FILE_BOZZE = "bozze_visite.json"
-bozze_visite = []
+load_dotenv()
 
-FILE_CLIENTI = "clienti_config.json"
-clienti_config = []
-FILE_EXCEL = "VISITE 2026.xlsx"
+DATABASE_URL = os.environ.get("DATABASE_URL")
+engine = create_engine(DATABASE_URL) if DATABASE_URL else None
 
+
+
+def get_cliente_id(nome_cliente):
+    nome_cliente = str(nome_cliente).strip()
+
+    assert engine is not None
+    with engine.connect() as conn:
+        result = conn.execute(
+            text("SELECT id FROM clienti WHERE TRIM(nome) = :nome"),
+            {"nome": nome_cliente}
+        ).fetchone()
+
+        if result:
+            return result[0]
+
+        result = conn.execute(
+            text("""
+                INSERT INTO clienti (nome)
+                VALUES (:nome)
+                RETURNING id
+            """),
+            {"nome": nome_cliente}
+        ).fetchone()
+
+        conn.commit()
+
+        if result is None:
+            raise Exception("Errore inserimento cliente")
+
+        return result[0]
+
+
+def salva_configurazione(cliente, valore, unita):
+    cliente_id = get_cliente_id(cliente)
+
+    assert engine is not None
+    with engine.connect() as conn:
+        # Verifica se esiste già
+        existing = conn.execute(
+            text("""
+                SELECT id FROM configurazioni_visita
+                WHERE cliente_id = :cliente_id
+            """),
+            {"cliente_id": cliente_id}
+        ).fetchone()
+
+        if existing:
+            conn.execute(
+                text("""
+                    UPDATE configurazioni_visita
+                    SET frequenza_valore = :valore,
+                        frequenza_unita = :unita
+                    WHERE cliente_id = :cliente_id
+                """),
+                {
+                    "valore": valore,
+                    "unita": unita,
+                    "cliente_id": cliente_id
+                }
+            )
+        else:
+            conn.execute(
+                text("""
+                    INSERT INTO configurazioni_visita
+                    (cliente_id, frequenza_valore, frequenza_unita)
+                    VALUES (:cliente_id, :valore, :unita)
+                """),
+                {
+                    "cliente_id": cliente_id,
+                    "valore": valore,
+                    "unita": unita
+                }
+            )
+
+        conn.commit()
+
+     
+
+def test_connessione_db():
+    if not DATABASE_URL:
+        return "DATABASE_URL non trovata"
+
+    try:
+        assert engine is not None
+        with engine.connect() as conn:
+            risultato = conn.execute(text("SELECT 1"))
+            return f"Connessione OK: {risultato.scalar()}"
+    except Exception as e:
+        return f"Errore connessione DB: {e}"
 
 def estrai_numero_settimana(nome_colonna):
     match = re.match(r"wk\s*(\d+)", str(nome_colonna).strip().lower())
@@ -32,42 +121,9 @@ def colonne_settimane(df):
 def data_da_settimana(anno, numero_settimana):
     return date.fromisocalendar(anno, numero_settimana, 1)
 
-def settimana_iso(data):
-    return data.isocalendar().week
-
-def trova_ultima_visita_excel(df, nome_cliente, anno_planning):
-    col_cliente = trova_colonna_cliente(df)
-    if not col_cliente:
-        return None
-
-    righe_cliente = df[
-        df[col_cliente].astype(str).str.strip().str.upper()
-        == str(nome_cliente).strip().upper()
-    ]
-    if righe_cliente.empty:
-        return None
-
-    settimane = colonne_settimane(df)
-
-    ultima_visita = None
-
-    for _, riga in righe_cliente.iterrows():
-        for nome_colonna, num_settimana in settimane:
-            valore = riga[nome_colonna]
-
-            if pd.notna(valore) and str(valore).strip() != "":
-                ultima_visita = {
-                    "settimana_colonna": nome_colonna,
-                    "numero_settimana": num_settimana,
-                    "valore": str(valore).strip(),
-                    "data_visita": data_da_settimana(anno_planning, num_settimana)
-                }
-
-    return ultima_visita
-
 def calcola_prossima_visita(data_ultima_visita, frequenza):
-    valore = frequenza.get("valore")
-    unita = frequenza.get("unita")
+    valore = frequenza.get("frequenza_valore")
+    unita = frequenza.get("frequenza_unita")
 
     if not valore or not unita:
         return None
@@ -80,124 +136,86 @@ def calcola_prossima_visita(data_ultima_visita, frequenza):
 
     return None
 
-def clienti_da_programmare():
-    df = carica_file()
-    anno_planning = 2026
 
-    oggi = date.today()
-    anno_attuale, settimana_attuale, _ = oggi.isocalendar()
-    settimana_prossima = settimana_attuale + 1
+def carica_bozze_db():
+    assert engine is not None
+    with engine.connect() as conn:
+        result = conn.execute(text("""
+            SELECT b.id, c.nome, b.settimana, b.tipo, b.data_inserimento
+            FROM bozze_visite b
+            JOIN clienti c ON c.id = b.cliente_id
+            ORDER BY b.id
+        """))
 
-    questa_settimana = []
-    prossima_settimana = []
-
-    for config in clienti_config:
-        cliente = config["cliente"]
-        ultima_visita = trova_ultima_visita_excel(df, cliente, anno_planning)
-
-        if not ultima_visita:
-            continue
-
-        frequenza = {
-            "valore": config.get("frequenza_valore"),
-            "unita": config.get("frequenza_unita")
-        }
-        prossima_data = calcola_prossima_visita(ultima_visita["data_visita"], frequenza)
-
-        if not prossima_data:
-            continue
-
-        anno_prossima, settimana_prossima_visita, _ = prossima_data.isocalendar()
-
-        record = {
-            "cliente": cliente,
-            "ultima_visita": ultima_visita["settimana_colonna"],
-            "tipo_ultima_visita": ultima_visita["valore"],
-            "data_ultima_visita": ultima_visita["data_visita"].strftime("%d/%m/%Y"),
-            "prossima_visita": prossima_data.strftime("%d/%m/%Y"),
-            "frequenza": f'{config["frequenza_valore"]} {config["frequenza_unita"]}'
-        }
-
-        if anno_prossima == anno_attuale and settimana_prossima_visita == settimana_attuale:
-            questa_settimana.append(record)
-        elif anno_prossima == anno_attuale and settimana_prossima_visita == settimana_prossima:
-            prossima_settimana.append(record)
-
-    return questa_settimana, prossima_settimana
-
-def carica_bozze():
-    global bozze_visite
-
-    if os.path.exists(FILE_BOZZE):
-        with open(FILE_BOZZE, "r", encoding="utf-8") as f:
-            bozze_visite = json.load(f)
-    else:
-        bozze_visite = []
-
-carica_bozze()
-
-def salva_bozze():
-    with open(FILE_BOZZE, "w", encoding="utf-8") as f:
-        json.dump(bozze_visite, f, ensure_ascii=False, indent=2)
-
-def carica_clienti():
-    global clienti_config
-
-    if os.path.exists(FILE_CLIENTI):
-        with open(FILE_CLIENTI, "r", encoding="utf-8") as f:
-            clienti_config = json.load(f)
-    else:
-        clienti_config = []
-
-carica_clienti()
+        return [
+            {
+                "id": row[0],
+                "cliente": row[1],
+                "settimana": row[2],
+                "tipo": row[3],
+                "data_inserimento": row[4].strftime("%Y-%m-%d") if row[4] else ""
+            }
+            for row in result
+        ]
 
 
+def salva_bozza_db(cliente, tipo, settimana, data_inserimento):
+    cliente_id = get_cliente_id(cliente)
 
-def salva_clienti():
-    with open(FILE_CLIENTI, "w", encoding="utf-8") as f:
-        json.dump(clienti_config, f, ensure_ascii=False, indent=2)
-
-
-
-
-def carica_file():
-    return pd.read_excel(FILE_EXCEL)
-
-def trova_colonna_cliente(df):
-    for col in df.columns:
-        if "client" in col.lower():
-            return col
-    return None
-
-
-def trova_settimane(df):
-    return [col for col in df.columns if "wk" in col.lower()]
+    assert engine is not None
+    with engine.connect() as conn:
+        conn.execute(
+            text("""
+                INSERT INTO bozze_visite (cliente_id, settimana, tipo, data_inserimento)
+                VALUES (:cliente_id, :settimana, :tipo, :data_inserimento)
+            """),
+            {
+                "cliente_id": cliente_id,
+                "settimana": settimana,
+                "tipo": tipo,
+                "data_inserimento": data_inserimento
+            }
+        )
+        conn.commit()
 
 
-def trova_settimana_corrente(settimane):
-    numero_settimana = datetime.now().isocalendar().week
-    nome_settimana = f"wk {numero_settimana}"
-    if nome_settimana in settimane:
-        return nome_settimana
-    return None
+def aggiorna_bozza_db(bozza_id, cliente, tipo, settimana, data_inserimento):
+    cliente_id = get_cliente_id(cliente)
 
+    assert engine is not None
+    with engine.connect() as conn:
+        conn.execute(
+            text("""
+                UPDATE bozze_visite
+                SET cliente_id = :cliente_id,
+                    settimana = :settimana,
+                    tipo = :tipo,
+                    data_inserimento = :data_inserimento
+                WHERE id = :bozza_id
+            """),
+            {
+                "bozza_id": bozza_id,
+                "cliente_id": cliente_id,
+                "settimana": settimana,
+                "tipo": tipo,
+                "data_inserimento": data_inserimento
+            }
+        )
+        conn.commit()
 
 @app.route("/")
 def index():
-    df = carica_file()
-    col_cliente = trova_colonna_cliente(df)
-    settimane = trova_settimane(df)
-    settimana_corrente = trova_settimana_corrente(settimane)
+    clienti = get_clienti_db()
+    settimana_corrente = f"wk {datetime.now().isocalendar().week}"
 
-    clienti = df[col_cliente].dropna().astype(str).tolist()
+    bozze_visite = carica_bozze_db()
 
     modifica_index = request.args.get("modifica")
     bozza_in_modifica = None
 
     if modifica_index is not None:
         modifica_index = int(modifica_index)
-        if 0 <= modifica_index < len(bozze_visite):
-            bozza_in_modifica = bozze_visite[modifica_index]
+        bozza_in_modifica = get_bozza_by_id(modifica_index)
     else:
         modifica_index = None
 
@@ -210,6 +228,262 @@ def index():
         modifica_index=modifica_index
     )
 
+def get_bozza_by_id(bozza_id):
+    
+    assert engine is not None
+    with engine.connect() as conn:
+        row = conn.execute(
+            text("""
+                SELECT b.id, c.nome, b.settimana, b.tipo, b.data_inserimento
+                FROM bozze_visite b
+                JOIN clienti c ON c.id = b.cliente_id
+                WHERE b.id = :bozza_id
+            """),
+            {"bozza_id": bozza_id}
+        ).fetchone()
+
+        if not row:
+            return None
+
+        return {
+            "id": row[0],
+            "cliente": row[1],
+            "settimana": row[2],
+            "tipo": row[3],
+            "data_inserimento": row[4].strftime("%Y-%m-%d") if row[4] else ""
+        }
+
+
+def svuota_bozze_db():
+    
+    assert engine is not None
+    with engine.connect() as conn:
+        conn.execute(text("DELETE FROM bozze_visite"))
+        conn.commit()
+
+def salva_visita_db(cliente, settimana, tipo, data_inserimento):
+    cliente_id = get_cliente_id(cliente)
+
+    match = re.match(r"wk\s*(\d+)", str(settimana).strip().lower())
+    if not match:
+        return
+
+    numero_settimana = int(match.group(1))
+    anno = datetime.now().year
+    settimana_db = f"wk {numero_settimana}"
+
+    assert engine is not None
+    with engine.connect() as conn:
+        esistente = conn.execute(
+            text("""
+                SELECT id
+                FROM visite
+                WHERE cliente_id = :cliente_id
+                  AND anno = :anno
+                  AND settimana = :settimana
+                  AND COALESCE(tipo, '') = COALESCE(:tipo, '')
+                LIMIT 1
+            """),
+            {
+                "cliente_id": cliente_id,
+                "anno": anno,
+                "settimana": settimana_db,
+                "tipo": tipo
+            }
+        ).fetchone()
+
+        if esistente:
+            return
+
+        conn.execute(
+            text("""
+                INSERT INTO visite (cliente_id, anno, settimana, tipo, data_inserimento)
+                VALUES (:cliente_id, :anno, :settimana, :tipo, :data_inserimento)
+            """),
+            {
+                "cliente_id": cliente_id,
+                "anno": anno,
+                "settimana": settimana_db,
+                "tipo": tipo,
+                "data_inserimento": data_inserimento
+            }
+        )
+        conn.commit()
+
+def get_configurazioni_db():
+    assert engine is not None
+    with engine.connect() as conn:
+        result = conn.execute(text("""
+            SELECT c.nome, cfg.frequenza_valore, cfg.frequenza_unita
+            FROM configurazioni_visita cfg
+            JOIN clienti c ON c.id = cfg.cliente_id
+            ORDER BY c.nome
+        """))
+
+        return [
+            {
+                "cliente": row[0],
+                "frequenza_valore": row[1],
+                "frequenza_unita": row[2]
+            }
+            for row in result
+        ]
+
+def get_clienti_db():
+    assert engine is not None
+    with engine.connect() as conn:
+        result = conn.execute(
+            text("SELECT nome FROM clienti ORDER BY nome")
+        )
+        return [row[0].strip() for row in result]
+
+def get_clienti_anagrafica_db():
+    assert engine is not None
+    with engine.connect() as conn:
+        result = conn.execute(text("""
+            SELECT nome, divisione, nazione, referente
+            FROM clienti
+            ORDER BY nome
+        """))
+
+        return [
+            {
+                "nome": row[0].strip() if row[0] else "",
+                "divisione": row[1] or "",
+                "nazione": row[2] or "",
+                "referente": row[3] or ""
+            }
+            for row in result
+        ]
+
+def get_clienti_configurati_db():
+    config = get_configurazioni_db()
+    return [c["cliente"] for c in config]
+
+def get_config_cliente_db(cliente):
+    cliente = str(cliente).strip()
+
+    assert engine is not None
+    with engine.connect() as conn:
+        row = conn.execute(
+            text("""
+                SELECT cfg.frequenza_valore, cfg.frequenza_unita
+                FROM configurazioni_visita cfg
+                JOIN clienti c ON c.id = cfg.cliente_id
+                WHERE TRIM(c.nome) = :cliente
+            """),
+            {"cliente": cliente}
+        ).fetchone()
+
+        if not row:
+            return None
+
+        return {
+            "frequenza_valore": row[0],
+            "frequenza_unita": row[1]
+        }
+
+def get_ultima_visita_db(cliente):
+    cliente = str(cliente).strip()
+
+    assert engine is not None
+    with engine.connect() as conn:
+        row = conn.execute(
+            text("""
+                SELECT v.anno, v.settimana, v.tipo, v.data_inserimento
+                FROM visite v
+                JOIN clienti c ON c.id = v.cliente_id
+                WHERE TRIM(c.nome) = :cliente
+                ORDER BY
+                    v.anno DESC,
+                    CAST(REPLACE(LOWER(v.settimana), 'wk ', '') AS INTEGER) DESC,
+                    v.id DESC
+                LIMIT 1
+        """),
+            {"cliente": cliente}
+        ).fetchone()
+
+        if not row:
+            return None
+
+        match = re.match(r"wk\s*(\d+)", str(row[1]).strip().lower())
+        if not match:
+            return None
+
+        numero_settimana = int(match.group(1))
+
+        return {
+            "anno": row[0],
+            "settimana_colonna": row[1],
+            "numero_settimana": numero_settimana,
+            "valore": row[2],
+            "data_visita": data_da_settimana(row[0], numero_settimana)
+        }
+
+def clienti_da_programmare_db():
+    oggi = datetime.today()
+    settimana_corrente = oggi.isocalendar()[1]
+
+    questa_settimana = []
+    mai_visitati = []
+
+    for cliente in get_clienti_configurati_db():
+        config = get_config_cliente_db(cliente)
+        if not config:
+            continue
+
+        ultima_visita = get_ultima_visita_db(cliente)
+
+        # 👉 NUOVO BLOCCO
+        if not ultima_visita:
+            record = {
+                "cliente": cliente,
+                "frequenza": f'{config["frequenza_valore"]} {config["frequenza_unita"]}'
+            }
+            mai_visitati.append(record)
+            continue
+
+        prossima_data = calcola_prossima_visita(
+            ultima_visita["data_visita"],
+            config
+        )
+
+        if prossima_data:
+            settimana_prossima = prossima_data.isocalendar()[1]
+
+            if settimana_prossima == settimana_corrente:
+                record = {
+                    "cliente": cliente,
+                    "ultima_visita": f'{ultima_visita["valore"]} ({ultima_visita["settimana_colonna"]})',
+                    "tipo_ultima_visita": ultima_visita["valore"],
+                    "data_ultima_visita": ultima_visita["data_visita"].strftime("%d/%m/%Y"),
+                    "prossima_visita": prossima_data.strftime("%d/%m/%Y"),
+                    "frequenza": f'{config["frequenza_valore"]} {config["frequenza_unita"]}'
+                }
+                questa_settimana.append(record)
+
+    return questa_settimana, mai_visitati
+
+def get_visite_db():
+    assert engine is not None
+    with engine.connect() as conn:
+        result = conn.execute(text("""
+            SELECT c.nome, v.anno, v.settimana, v.tipo
+            FROM visite v
+            JOIN clienti c ON c.id = v.cliente_id
+            ORDER BY c.nome, v.anno, v.id
+        """))
+
+        return [
+            {
+                "cliente": row[0].strip(),
+                "anno": row[1],
+                "settimana": row[2],
+                "tipo": row[3]
+            }
+            for row in result
+        ]
+
 @app.route("/salva", methods=["POST"])
 def salva():
     cliente_scelto = request.form["cliente"]
@@ -217,109 +491,114 @@ def salva():
     settimana = request.form["settimana"]
     modifica_index = request.form.get("modifica_index")
 
-    nuova_bozza = {
-        "cliente": cliente_scelto,
-        "tipo": tipo,
-        "settimana": settimana,
-        "data_inserimento":datetime.now().strftime("%Y-%m-%d")
-    }
+    data_inserimento = datetime.now().strftime("%Y-%m-%d")
 
     if modifica_index not in (None, ""):
-        modifica_index = int(modifica_index)
-        if 0 <= modifica_index < len(bozze_visite):
-            bozze_visite[modifica_index] = nuova_bozza
+        aggiorna_bozza_db(
+            int(modifica_index),
+            cliente_scelto,
+            tipo,
+            settimana,
+            data_inserimento
+        )
     else:
-        bozze_visite.append(nuova_bozza)
-    salva_bozze()   
+        salva_bozza_db(
+            cliente_scelto,
+            tipo,
+            settimana,
+            data_inserimento
+        )
+
     return redirect(url_for("index", step=5))
 
 @app.route("/scarica")
 def scarica():
-    df = pd.read_excel(FILE_EXCEL)
-    col_cliente = trova_colonna_cliente(df)
+    bozze_visite = carica_bozze_db()
 
     for bozza in bozze_visite:
-        cliente_scelto = bozza["cliente"]
-        tipo = bozza["tipo"]
-        settimana = bozza["settimana"]
+        salva_visita_db(
+            bozza["cliente"],
+            bozza["settimana"],
+            bozza["tipo"],
+            bozza["data_inserimento"]
+        )
 
-        indice_lista = df[
-            df[col_cliente].astype(str).str.strip().str.upper()
-            == str(cliente_scelto).strip().upper()
-        ].index 
+    svuota_bozze_db()
 
-        if len(indice_lista) == 0:
-            continue
+    clienti = get_clienti_anagrafica_db()
+    visite = get_visite_db()
+    settimane = [f"wk {i}" for i in range(1, 54)]
 
-        indice = indice_lista[0]
+    righe = []
+    for cliente in clienti:
+        riga = {
+            "Cliente": cliente["nome"],
+            "Divisione": cliente["divisione"],
+            "Nazione": cliente["nazione"],
+            "Referente": cliente["referente"]
+        }
 
-        if settimana not in df.columns:
-            continue
+        for settimana in settimane:
+            riga[settimana] = ""
 
-        df[settimana] = df[settimana].astype("object")
-        valore_attuale = df.loc[indice, settimana]
+        visite_cliente = [v for v in visite if v["cliente"] == cliente["nome"]]
 
-        if pd.isna(valore_attuale) or valore_attuale == "":
-            nuovo_valore = tipo
-        else:
-            nuovo_valore = f"{valore_attuale} / {tipo}"
+        for visita in visite_cliente:
+            settimana = visita["settimana"]
+            tipo = visita["tipo"]
 
-        df.loc[indice, settimana] = nuovo_valore
+            if settimana in riga:
+                if not riga[settimana]:
+                 riga[settimana] = tipo
+                else:
+                    riga[settimana] = f'{riga[settimana]} / {tipo}'
 
-    
-    df.to_excel(FILE_EXCEL, index=False)
+        righe.append(riga)
 
 
-    
-# 👉 Svuota bozze
-    bozze_visite.clear()
-    salva_bozze()
-    # 👉 Prepara download
-    return send_file(FILE_EXCEL, as_attachment=True)
+    df = pd.DataFrame(righe)
 
+    nome_file = f"visite_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    percorso = os.path.join(tempfile.gettempdir(), nome_file)
+    df.to_excel(percorso, index=False)
+
+    return send_file(percorso, as_attachment=True, download_name=nome_file)
 
 
 @app.route("/planning")
 def planning():
-    questa_settimana, prossima_settimana = clienti_da_programmare()
+    questa_settimana, mai_visitati = clienti_da_programmare_db()
 
     return render_template(
         "planning.html",
-        questa_settimana=questa_settimana,
-        prossima_settimana=prossima_settimana
+        clienti_settimana=questa_settimana,
+        mai_visitati=mai_visitati
     )
+
+@app.route("/test-db")
+def test_db():
+    return test_connessione_db()
 
 @app.route("/configura", methods=["GET", "POST"])
 def configura():
-    df = carica_file()
-    col_cliente = trova_colonna_cliente(df)
-    clienti = df[col_cliente].dropna().astype(str).tolist()
+    clienti = get_clienti_db()
 
     if request.method == "POST":
         cliente = request.form["cliente"]
         valore = int(request.form["valore"])
         unita = request.form["unita"]
 
-        trovato = False
-        for c in clienti_config:
-            if c["cliente"] == cliente:
-                c["frequenza_valore"] = valore
-                c["frequenza_unita"] = unita
-                trovato = True
-                break
-
-        if not trovato:
-            clienti_config.append({
-                "cliente": cliente,
-                "frequenza_valore": valore,
-                "frequenza_unita": unita
-            })
-
-        salva_clienti()
+        salva_configurazione(cliente, valore, unita)
 
         return redirect(url_for("configura"))
 
-    return render_template("configura.html", clienti=clienti, clienti_config=clienti_config)
+    config_db = get_configurazioni_db()
+
+    return render_template(
+        "configura.html",
+        clienti=clienti,
+        clienti_config=config_db
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

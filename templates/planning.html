@@ -11,7 +11,7 @@
     {% if questa_settimana %}
         <ul>
             {% for c in questa_settimana %}
-                <li>{{ c.cliente }} {{ c.prossima }}</li>
+                <li>{{ c.cliente }} {{ c.prossima_visita }}</li>
             {% endfor %}
         </ul>
     {% else %}
@@ -22,11 +22,24 @@
     {% if prossima_settimana %}
         <ul>
             {% for c in prossima_settimana %}
-                <li>{{ c.cliente }} {{ c.prossima }}</li>
+                <li>{{ c.cliente }} {{ c.prossima_visita }}</li>
             {% endfor %}
         </ul>
     {% else %}
         <p>Nessun cliente da programmare la prossima settimana.</p>
+    {% endif %}
+    <h2>Ancora da visitare</h2>
+
+    {% if mai_visitati %}
+    <ul>
+        {% for c in mai_visitati %}
+            <li>
+                {{ c.cliente }} — frequenza: {{ c.frequenza }}
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Tutti i clienti hanno almeno una visita registrata</p>
     {% endif %}
 </body>
 </html>
