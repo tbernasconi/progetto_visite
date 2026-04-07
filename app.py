@@ -45,6 +45,65 @@ def get_cliente_id(nome_cliente):
 
         return result[0]
 
+def salva_o_aggiorna_cliente(nome, divisione="", nazione="", referente=""):
+    nome = str(nome).strip()
+    divisione = str(divisione).strip()
+    nazione = str(nazione).strip()
+    referente = str(referente).strip()
+
+    if not nome:
+        raise ValueError("Il nome cliente è obbligatorio")
+
+    assert engine is not None
+    with engine.connect() as conn:
+        esistente = conn.execute(
+            text("""
+                SELECT id
+                FROM clienti
+                WHERE TRIM(nome) = :nome
+            """),
+            {"nome": nome}
+        ).fetchone()
+
+        if esistente:
+            conn.execute(
+                text("""
+                    UPDATE clienti
+                    SET divisione = :divisione,
+                        nazione = :nazione,
+                        referente = :referente
+                    WHERE id = :cliente_id
+                """),
+                {
+                    "cliente_id": esistente[0],
+                    "divisione": divisione,
+                    "nazione": nazione,
+                    "referente": referente
+                }
+            )
+            conn.commit()
+            return esistente[0]
+
+        nuovo = conn.execute(
+            text("""
+                INSERT INTO clienti (nome, divisione, nazione, referente)
+                VALUES (:nome, :divisione, :nazione, :referente)
+                RETURNING id
+            """),
+            {
+                "nome": nome,
+                "divisione": divisione,
+                "nazione": nazione,
+                "referente": referente
+            }
+        ).fetchone()
+
+        conn.commit()
+
+        if nuovo is None:
+            raise Exception("Errore inserimento cliente")
+
+        return nuovo[0]
 
 def salva_configurazione(cliente, valore, unita):
     cliente_id = get_cliente_id(cliente)
@@ -608,9 +667,24 @@ def configura():
     clienti = get_clienti_db()
 
     if request.method == "POST":
-        cliente = request.form["cliente"]
+        nuovo_cliente = request.form.get("nuovo_cliente", "").strip()
+        divisione = request.form.get("divisione", "").strip()
+        nazione = request.form.get("nazione", "").strip()
+        referente = request.form.get("referente", "").strip()
+
         valore = int(request.form["valore"])
         unita = request.form["unita"]
+
+        if nuovo_cliente:
+            cliente = nuovo_cliente
+            salva_o_aggiorna_cliente(
+                nome=nuovo_cliente,
+                divisione=divisione,
+                nazione=nazione,
+                referente=referente
+            )
+        else:
+            cliente = request.form["cliente"]
 
         salva_configurazione(cliente, valore, unita)
 

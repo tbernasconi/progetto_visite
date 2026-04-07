@@ -10,9 +10,11 @@
     <a href="{{ url_for('planning') }}">Planning</a> |
     <a href="{{ url_for('configura') }}">Configura</a>
 </div>
+
 <h1>Configurazione frequenza clienti</h1>
 
 <form method="post">
+    <h2>Cliente esistente</h2>
     <label>Cliente:</label>
     <select name="cliente" id="cliente">
         {% for cliente in clienti %}
@@ -20,7 +22,33 @@
         {% endfor %}
     </select>
 
+    <hr>
+
+    <h2>Oppure aggiungi un nuovo cliente</h2>
+
+    <label>Nome nuovo cliente:</label>
+    <input type="text" name="nuovo_cliente" id="nuovo_cliente">
+
     <br><br>
+
+    <label>Divisione:</label>
+    <input type="text" name="divisione" id="divisione">
+
+    <br><br>
+
+    <label>Nazione:</label>
+    <input type="text" name="nazione" id="nazione">
+
+    <br><br>
+
+    <label>Referente:</label>
+    <select name="referente" id="referente">
+        <option value="">-- Seleziona --</option>
+        <option value="Simone">Simone</option>
+        <option value="Luca">Luca</option>
+    </select>
+
+    <hr>
 
     <label>Ogni quanto:</label>
     <input type="number" name="valore" id="valore" required>
@@ -53,8 +81,15 @@
     const clienteSelect = document.getElementById("cliente");
     const valoreInput = document.getElementById("valore");
     const unitaSelect = document.getElementById("unita");
+    const nuovoClienteInput = document.getElementById("nuovo_cliente");
 
     function aggiornaCampi() {
+        if (nuovoClienteInput.value.trim() !== "") {
+            valoreInput.value = "";
+            unitaSelect.value = "settimane";
+            return;
+        }
+
         const clienteSelezionato = clienteSelect.value;
         const config = configClienti.find(c => c.cliente === clienteSelezionato);
 
@@ -68,7 +103,9 @@
     }
 
     clienteSelect.addEventListener("change", aggiornaCampi);
-    aggiornaCampi(); // ✅ pre-popola al caricamento
+    nuovoClienteInput.addEventListener("input", aggiornaCampi);
+
+    aggiornaCampi();
 </script>
 
 </body>
