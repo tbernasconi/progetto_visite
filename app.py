@@ -624,12 +624,31 @@ def scarica():
 
             if settimana in riga:
                 if not riga[settimana]:
-                 riga[settimana] = tipo
+                    riga[settimana] = tipo
                 else:
                     riga[settimana] = f'{riga[settimana]} / {tipo}'
 
         righe.append(riga)
 
+    riga_totale = {
+        "Cliente": "TOTALE",
+        "Divisione": "",
+        "Nazione": "",
+        "Referente": ""
+    }
+
+    for settimana in settimane:
+        totale_settimana = 0
+
+        for riga in righe:
+            valore = str(riga.get(settimana, "")).strip()
+
+            if valore:
+                totale_settimana += 1
+
+        riga_totale[settimana] = str(totale_settimana)
+
+    righe.append(riga_totale)
 
     df = pd.DataFrame(righe)
 
@@ -638,7 +657,6 @@ def scarica():
     df.to_excel(percorso, index=False)
 
     return send_file(percorso, as_attachment=True, download_name=nome_file)
-
 
 @app.route("/planning")
 def planning():
