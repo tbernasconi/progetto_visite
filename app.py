@@ -600,8 +600,16 @@ def scarica():
 
     svuota_bozze_db()
 
-    clienti = get_clienti_anagrafica_db()
-    visite = get_visite_db()
+    clienti = [
+        c for c in get_clienti_anagrafica_db()
+        if str(c.get("nome", "")).strip().upper() != "TOTALE"
+    ]
+
+    visite = [
+        v for v in get_visite_db()
+        if str(v.get("cliente", "")).strip().upper() != "TOTALE"
+    ]
+
     settimane = [f"wk {i}" for i in range(1, 54)]
 
     righe = []
@@ -637,18 +645,50 @@ def scarica():
         "Referente": ""
     }
 
+    riga_totale_luca = {
+        "Cliente": "TOTALE LUCA",
+        "Divisione": "",
+        "Nazione": "",
+        "Referente": "Luca"
+    }
+
+    riga_totale_simone = {
+        "Cliente": "TOTALE SIMONE",
+        "Divisione": "",
+        "Nazione": "",
+        "Referente": "Simone"
+    }
+
+    for settimana in settimane:
+        totale_luca = 0
+        totale_simone = 0
+
+        for riga in righe:
+            valore = str(riga.get(settimana, "")).strip()
+            referente = str(riga.get("Referente", "")).strip().lower()
+
+            if valore:
+                if referente == "luca":
+                    totale_luca += 1
+                elif referente == "simone":
+                    totale_simone += 1
+
+        riga_totale_luca[settimana] = str(totale_luca)
+        riga_totale_simone[settimana] = str(totale_simone)
+
     for settimana in settimane:
         totale_settimana = 0
 
         for riga in righe:
             valore = str(riga.get(settimana, "")).strip()
-
             if valore:
                 totale_settimana += 1
 
         riga_totale[settimana] = str(totale_settimana)
 
     righe.append(riga_totale)
+    righe.append(riga_totale_luca)
+    righe.append(riga_totale_simone)
 
     df = pd.DataFrame(righe)
 
